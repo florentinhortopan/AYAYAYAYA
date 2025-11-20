@@ -23,10 +23,6 @@
     }
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"],
-  "references": [
-    { "path": "../agents" },
-    { "path": "../shared" }
-  ]
+  "exclude": ["node_modules", "dist"]
 }
 
