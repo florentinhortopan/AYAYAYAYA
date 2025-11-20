@@ -1,0 +1,34 @@
+{
+  "name": "army-recruitment-platform",
+  "version": "1.0.0",
+  "description": "Multi-agent AI platform for army recruitment with personalized career paths, training, and community features",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend",
+    "agents",
+    "shared"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "npm run dev --workspace=backend",
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present"
+  },
+  "keywords": [
+    "ai-agents",
+    "army-recruitment",
+    "career-guidance",
+    "training",
+    "gamification"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "@types/node": "^20.10.0"
+  }
+}
+
