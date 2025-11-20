@@ -26,8 +26,8 @@ const PORT = parseInt(process.env.PORT || process.env.API_PORT || '3001', 10);
 
 // Middleware
 app.use(helmet());
-// CORS configuration - Railway sets FRONTEND_URL automatically
-const frontendUrl = process.env.FRONTEND_URL || process.env.RAILWAY_PUBLIC_DOMAIN || 'http://localhost:3000';
+// CORS configuration - Vercel or Railway sets FRONTEND_URL automatically
+const frontendUrl = process.env.FRONTEND_URL || process.env.VERCEL_URL || process.env.RAILWAY_PUBLIC_DOMAIN || 'http://localhost:3000';
 app.use(cors({
   origin: frontendUrl,
   credentials: true
@@ -135,32 +135,39 @@ if (process.env.NODE_ENV === 'production') {
 // Error handling (must be last)
 app.use(errorHandler);
 
-// Start server
-async function startServer() {
-  try {
-    await connectDatabase();
-    
-    // Redis is optional - don't fail if it's not available
+// Start server (only if not in Vercel/serverless environment)
+if (require.main === module || process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  async function startServer() {
     try {
-      await connectRedis();
-    } catch (error) {
-      logger.warn('Redis connection failed, continuing without Redis:', error);
-    }
-    
-    app.listen(PORT, '0.0.0.0', () => {
-      logger.info(`Server running on port ${PORT}`);
-      logger.info(`Environment: ${process.env.NODE_ENV || 'development'}`);
-      if (process.env.RAILWAY_PUBLIC_DOMAIN) {
-        logger.info(`Railway public domain: ${process.env.RAILWAY_PUBLIC_DOMAIN}`);
+      await connectDatabase();
+      
+      // Redis is optional - don't fail if it's not available
+      try {
+        await connectRedis();
+      } catch (error) {
+        logger.warn('Redis connection failed, continuing without Redis:', error);
       }
-    });
-  } catch (error) {
-    logger.error('Failed to start server:', error);
-    process.exit(1);
+      
+      const serverPort = parseInt(process.env.PORT || process.env.API_PORT || '3001', 10);
+      app.listen(serverPort, '0.0.0.0', () => {
+        logger.info(`Server running on port ${serverPort}`);
+        logger.info(`Environment: ${process.env.NODE_ENV || 'development'}`);
+        if (process.env.RAILWAY_PUBLIC_DOMAIN) {
+          logger.info(`Railway public domain: ${process.env.RAILWAY_PUBLIC_DOMAIN}`);
+        }
+        if (process.env.VERCEL) {
+          logger.info(`Vercel environment detected`);
+        }
+      });
+    } catch (error) {
+      logger.error('Failed to start server:', error);
+      process.exit(1);
+    }
   }
+
+  startServer();
 }
 
-startServer();
-
+// Export for Vercel serverless functions
 export default app;
 
