@@ -9,7 +9,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
-    "typeRoots": ["./node_modules/@types", "../node_modules/@types"],
+    "typeRoots": ["./node_modules/@types", "../node_modules/@types", "../agents/node_modules/@types"],
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "moduleResolution": "node",
@@ -19,9 +19,9 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@shared/*": ["../shared/src/*"],
-      "@army-recruitment/agents": ["../agents/src/index.ts"],
-      "@army-recruitment/agents/*": ["../agents/src/*"]
+      "@shared/*": ["../shared/dist/*", "../shared/src/*"],
+      "@army-recruitment/agents": ["../agents/dist/index", "../agents/src/index.ts"],
+      "@army-recruitment/agents/*": ["../agents/dist/*", "../agents/src/*"]
     }
   },
   "include": ["src/**/*"],

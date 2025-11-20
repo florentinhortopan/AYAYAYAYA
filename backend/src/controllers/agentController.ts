@@ -1,8 +1,6 @@
 import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../middleware/auth';
-// @ts-ignore - Workspace dependency resolution
 import { AgentOrchestrator } from '@army-recruitment/agents';
-// @ts-ignore - Workspace dependency resolution
 import { AgentType } from '@army-recruitment/agents';
 import { pool } from '../database/connection';
 
