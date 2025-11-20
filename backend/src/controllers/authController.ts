@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { AuthRequest } from '../middleware/auth';
 import { AppError } from '../middleware/errorHandler';
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { pool } from '../database/connection';
 import { v4 as uuidv4 } from 'uuid';
@@ -13,10 +13,11 @@ export class AuthController {
       // Store guest session in Redis or database
       // For now, return a temporary token
       const jwtSecret = process.env.JWT_SECRET || 'secret';
+      const options = { expiresIn: '30d' } as SignOptions;
       const token = jwt.sign(
         { id: sessionId, isRegistered: false },
         jwtSecret,
-        { expiresIn: '30d' }
+        options
       );
 
       res.json({ sessionId, token });
@@ -68,10 +69,11 @@ export class AuthController {
 
       const jwtSecret = process.env.JWT_SECRET || 'secret';
       const expiresIn = process.env.JWT_EXPIRES_IN || '7d';
+      const options = { expiresIn } as SignOptions;
       const token = jwt.sign(
         { id: user.id, email: user.email, isRegistered: true },
         jwtSecret,
-        { expiresIn }
+        options
       );
 
       res.status(201).json({ user, token });
@@ -106,10 +108,11 @@ export class AuthController {
 
       const jwtSecret = process.env.JWT_SECRET || 'secret';
       const expiresIn = process.env.JWT_EXPIRES_IN || '7d';
+      const options = { expiresIn } as SignOptions;
       const token = jwt.sign(
         { id: user.id, email: user.email, isRegistered: user.is_registered },
         jwtSecret,
-        { expiresIn }
+        options
       );
 
       res.json({ user: { ...user, password_hash: undefined }, token });
