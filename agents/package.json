@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "AI agents for army recruitment platform",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",

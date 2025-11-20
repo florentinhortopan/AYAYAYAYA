@@ -12,10 +12,11 @@ export class AuthController {
       const sessionId = uuidv4();
       // Store guest session in Redis or database
       // For now, return a temporary token
+      const jwtSecret = process.env.JWT_SECRET || 'secret';
       const token = jwt.sign(
         { id: sessionId, isRegistered: false },
-        process.env.JWT_SECRET || 'secret',
-        { expiresIn: '30d' as string }
+        jwtSecret,
+        { expiresIn: '30d' }
       );
 
       res.json({ sessionId, token });
@@ -66,11 +67,11 @@ export class AuthController {
       const user = result.rows[0];
 
       const jwtSecret = process.env.JWT_SECRET || 'secret';
-      const expiresIn = process.env.JWT_EXPIRES_IN || '7d';
+      const expiresIn: string = process.env.JWT_EXPIRES_IN || '7d';
       const token = jwt.sign(
         { id: user.id, email: user.email, isRegistered: true },
         jwtSecret,
-        { expiresIn }
+        { expiresIn: expiresIn }
       );
 
       res.status(201).json({ user, token });
@@ -104,11 +105,11 @@ export class AuthController {
       }
 
       const jwtSecret = process.env.JWT_SECRET || 'secret';
-      const expiresIn = process.env.JWT_EXPIRES_IN || '7d';
+      const expiresIn: string = process.env.JWT_EXPIRES_IN || '7d';
       const token = jwt.sign(
         { id: user.id, email: user.email, isRegistered: user.is_registered },
         jwtSecret,
-        { expiresIn }
+        { expiresIn: expiresIn }
       );
 
       res.json({ user: { ...user, password_hash: undefined }, token });

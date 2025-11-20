@@ -22,7 +22,7 @@ import agentConfigRoutes from './routes/agentConfig';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || process.env.API_PORT || 3001;
+const PORT = parseInt(process.env.PORT || process.env.API_PORT || '3001', 10);
 
 // Middleware
 app.use(helmet());
