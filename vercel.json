@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "npm ci && npm run build:shared && npm run build:agents && npm run build:backend && npm run build:frontend",
+  "buildCommand": "npm ci && (cd shared && npm run build) && (cd agents && npm run build) && (cd backend && npm run build) && (cd frontend && npm run build)",
   "outputDirectory": "frontend/dist",
   "installCommand": "npm install",
   "rewrites": [
