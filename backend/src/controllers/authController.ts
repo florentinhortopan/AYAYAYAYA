@@ -68,8 +68,8 @@ export class AuthController {
       const user = result.rows[0];
 
       const jwtSecret = process.env.JWT_SECRET || 'secret';
-      const expiresIn = process.env.JWT_EXPIRES_IN || '7d';
-      const options: SignOptions = { expiresIn };
+      const expiresIn = (process.env.JWT_EXPIRES_IN || '7d') as string;
+      const options: SignOptions = { expiresIn: expiresIn as string | number };
       const token = jwt.sign(
         { id: user.id, email: user.email, isRegistered: true },
         jwtSecret,
@@ -107,8 +107,8 @@ export class AuthController {
       }
 
       const jwtSecret = process.env.JWT_SECRET || 'secret';
-      const expiresIn = process.env.JWT_EXPIRES_IN || '7d';
-      const options: SignOptions = { expiresIn };
+      const expiresIn = (process.env.JWT_EXPIRES_IN || '7d') as string;
+      const options: SignOptions = { expiresIn: expiresIn as string | number };
       const token = jwt.sign(
         { id: user.id, email: user.email, isRegistered: user.is_registered },
         jwtSecret,
